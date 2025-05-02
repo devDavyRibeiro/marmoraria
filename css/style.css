@@ -11,8 +11,6 @@ color: white;
 
 }
 
-
-
 body, html {
 display: flex;
 flex-direction: column;
@@ -63,6 +61,9 @@ margin-left: 0; /* Define a margem esquerda como 0 para alinhar o carrossel à e
 
 }
 
+tr{
+  cursor: pointer;
+}
 .animated-button {
   position: relative;
   background: transparent; /* Fundo transparente */
@@ -121,7 +122,7 @@ margin-left: 0; /* Define a margem esquerda como 0 para alinhar o carrossel à e
   margin-top:16px;
 }
 .custom-modal-size {
-  max-width: 500px; /* Largura máxima para o modal médio */
+  max-width: 375px; /* Largura máxima para o modal médio */
   width: 100%; /* Largura em porcentagem para garantir responsividade */
 }
 .modal-with-background .modal-header {
@@ -156,8 +157,6 @@ margin-left: 0; /* Define a margem esquerda como 0 para alinhar o carrossel à e
   background-color: transparent; /* Deixe o conteúdo do modal transparente para que a cor de fundo definida anteriormente seja visível */
   border: none; /* Remova a borda do modal-content se você não deseja borda */
 }
-
-
 
 .box {
   float: right; /* Alinha a caixa à direita */
@@ -394,7 +393,7 @@ Generic layout (demo looks)
   height: 400px;
 }
 /*Botão de fazer login*/
-.button1, .button-admin{
+.button1 {
   display: inline-block;
   padding: 12px 20px;
   border-radius: 160px;
@@ -406,10 +405,11 @@ Generic layout (demo looks)
   position: relative;
   overflow: hidden;
   z-index: 1;
-  width: auto;
+  margin-right: 40px;
+  width: 100px;
   height: 50px;
 }
-.button1:after, .button-admin :after {
+.button1:after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -420,7 +420,7 @@ Generic layout (demo looks)
   border-radius: 160px;
   z-index: -2;
 }
-.button1:before, .button-admin:before {
+.button1:before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -432,18 +432,11 @@ Generic layout (demo looks)
   border-radius: 160px;
   z-index: -1;
 }
-.button1:hover, .button-admin:hover {
+.button1:hover {
   color: #fff;
 }
-.button1:hover:before, .button-admin:hover:before {
+.button1:hover:before {
   width: 100%;
-}
-.button-admin{
-  border-color: #207bf3;
-  font-size: 12px;
-}
-.button-admin:before{
-  background-color: #207bf3;
 }
 .button2 {
   display: inline-block;
@@ -602,7 +595,7 @@ a {
 .boxindexlogin {
   float: center; 
   max-width: 100%; /* Largura máxima da caixa */
-  height: auto; /* Altura automática da caixa para se ajustar ao conteúdo */
+  height: 100%; /* Altura automática da caixa para se ajustar ao conteúdo */
   margin-top: 20px;
   border-radius: 15px;
   border-color: #999;
@@ -616,7 +609,7 @@ a {
   }
 
   .glow-on-hover {
-    width: 220px;
+    width: 100%;
     height: 50px;
     border: none;
     outline: none;
@@ -799,4 +792,10 @@ a {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9bc635', endColorstr='#c0ea67',GradientType=1 );
   }
   
-
+  .larger-select {
+    width: 350px;
+    height: 35px;
+}
+.botao-direita {
+  float: right;
+}

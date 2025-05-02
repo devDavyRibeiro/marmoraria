@@ -5,7 +5,7 @@ $vDates = leitura();
 ?>
 
 <br>
-<?php if(!is_null($vDates)):?>
+<?php if (!is_null($vDates) and ! is_bool($vDates)) : ?>
 <div class="boxleitura">
 <h1 class="text-center">Funcionários</h1>
 <hr>
@@ -42,6 +42,9 @@ $vDates = leitura();
 			<?php endforeach;?>
 		</tbody>
 	</table>
+	<a class="btn buttond botao-direita" href="../index.php">Voltar</a>
+	<br>
+			<br>
 </div>
 </div>
 <?php else: ?>

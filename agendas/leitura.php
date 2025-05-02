@@ -11,7 +11,7 @@ else{
 }
 ?>
 <br>
-<?php if(!is_null($vDates)):?>
+<?php if (!is_null($vDates) and ! is_bool($vDates)) : ?>
 	<div class="boxleitura">
 		<h1 class="text-center">Meus Agendamentos</h1>
 		<hr>
@@ -29,7 +29,11 @@ else{
 				<tbody>
 					<?php foreach ($vDates as $vKey):?>
 						<tr >
-							<td  scope="row"><?php echo formataData($vKey['visita_agenda'],"d/m/Y H:m") ; ?></td>
+							<?php if($vKey['visita_agenda'] == '0000-00-00 00:00:00'): ?>
+								<td scope="row">Nenhuma data de visita</td>
+							<?php else: ?>
+								<td scope="row"><?php echo formataData($vKey['visita_agenda'],"d/m/Y H:m") ; ?></td>
+							<?php endif; ?>
 							<td ><?php echo $vKey['descricao_agenda']; ?></td>
 							<td ><?php echo $vKey['nome_funcionario']; ?></td>
 							<td ><?php echo  formataTelefone($vKey['telefone_funcionario']); ?></td>
@@ -49,7 +53,11 @@ else{
 					<?php endforeach;?>
 				</tbody>
 			</table>
+			<a class="btn buttond botao-direita" href="../index.php">Voltar</a>
+			<br>
+			<br>
 		</div>
+		
 	</div>
 <?php else: ?>
 		<h1>Nenhuma Agenda</h1>

@@ -7,34 +7,26 @@ if (empty($_GET['i'])) {
 }
 $vId = base64_decode($_GET['i']);
 $vValue = editar($vId);
-$vF = null; 
-if (isset($_GET['f'])) {
-    $vF = $_GET['f'];
-}
 ?>
 <br>
 <div class="boxcadastro">
-    <h1 class="text-center">Edição da produção: <?php echo $vNome; ?></h1>
+    <h1 class="text-center">Edição da Produção</h1>
     <hr>
     <div class="formulario container">
         <form action="#" method="post">
             <br>
             <div class="row">
                 <div class="mb-3 col-11">
-                    <label class="ms-1 form-label ">Material do Pedido</label>
-                    <input type="text" class="form-control" name="material" value="<?php echo $vValue['material_orcamento_produto'] ?>" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="mb-3 col-11">
-                    <label class="ms-1 form-label ">Serviço a Ser Prestado</label>
-                    <input type="text" class="form-control" name="servico" value="<?php echo $vValue['servico_orcamento_produto'] ?>" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="mb-3 col-11">
-                    <label class="ms-1 form-label ">Medidas</label>
-                    <textarea name="medida" class="form-control" id="" cols="30" rows="5"  placeholder="Medida do Frontão: 20cm... "> <?php echo $vValue['medida_orcamento_produto'] ?></textarea>
+                    <label id="Status" class="ms-1 form-label ">Status da Produção</label>
+                    <select class="form-select" name="status" id="Status">
+                        <?php if($vValue['status_orcamento_produto'] == "Em Produção"): ?>
+                            <option selected value="Em Produção">Em Produção</option>
+                            <option value="Concluído">Concluído</option>
+                        <?php else: ?>
+                            <option  value="Em Produção">Em Produção</option>
+                            <option selected value="Concluído">Concluído</option>
+                        <?php endif; ?>
+                    </select>
                 </div>
             </div>
             <div class="row">

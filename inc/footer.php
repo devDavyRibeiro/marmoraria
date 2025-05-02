@@ -72,20 +72,7 @@
  <script src="<?php echo BASEURL; ?>js/popper.min.js"></script>
  <script src="<?php echo BASEURL;?>js/bootstrap/bootstrap.min.js"></script> 
  <script src="<?php echo BASEURL;?>js/fontawesome/all.min.js"></script>
- <script>
-  function ReadOnlyData(){
-    var selectElement = document.getElementById("pag");
-    var dataInput = document.getElementById("data");
-    if (selectElement.value === "s") {
-        dataInput.removeAttribute("readonly");
-        dataInput.removeAttribute("required");
-    } else {
-        dataInput.setAttribute("readonly", "readonly");
-        dataInput.setAttribute("required","required");
-    }
-    
- }
- </script>
+
 </html>
 <?php 
 include 'loginModal.php';

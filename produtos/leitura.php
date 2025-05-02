@@ -5,7 +5,8 @@ $vDates = leitura();
 ?>
 
 <br>
-<?php if(!is_null($vDates)):?>
+<?php if (!is_null($vDates) and ! is_bool($vDates)) : ?>
+	
 <div class="boxleitura">
 
 <h1 class="text-center">Produtos</h1>
@@ -16,7 +17,6 @@ $vDates = leitura();
 		<thead>
 			<tr>
 				<th scope="col">Nome</th>
-				<th scope="col">Valor</th>
 				<th scope="col">Foto</th>
 				<th scope="col">Opção </th>
 			</tr>
@@ -25,7 +25,6 @@ $vDates = leitura();
 			<?php foreach ($vDates as $vKey):?>
 				<tr class="">
 					<td scope="row"><?php echo $vKey['nome_produto']; ?></td>
-					<td>R$<?php echo $vKey['valor_produto']; ?></td>
 					<?php
 						$vFoto = "";
 						if (empty($vKey['foto_produto'])) {
@@ -44,9 +43,14 @@ $vDates = leitura();
 				</tr>
 			<?php endforeach;?>
 		</tbody>
+		
 	</table>
 </div>
+	<a class="btn buttond botao-direita" href="../index.php">Voltar</a>
+<br>
+<br>
 </div>
+
 <?php else: ?>
 		<h1>Nenhuma Agenda</h1>
 <?php endif; ?>

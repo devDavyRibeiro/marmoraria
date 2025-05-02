@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<link rel="icon" href="MC.ico" type="image/x-icon">
+	<link rel="icon" href="<?php echo BASEURL?>inc/MC.ico" type="image/x-icon">
 	<title>Marmoraria Chiovetto</title>
 	<!-- Bootstrap versão 5.1.3-->
 	<link rel="stylesheet" href="<?php echo BASEURL; ?>css/bootstrap/bootstrap.min.css">
@@ -32,6 +32,32 @@
 									<h5>Trabalhos</h5>
 								</a>
 							</li>
+							<!-- Agendas Orçamentos e Produções -->
+							<?php if (check_admin_funcionario()) : ?>
+								<?php if ($_SESSION['cargo'] == "admin" or $_SESSION['cargo'] == "orçamento") : ?>
+									<li class="nav-item dropdown ps-2">
+										<a class="nav-link animated-button my-float" href="<?php echo BASEURL; ?>agendas/leitura.php" style="color: white;">
+											<h5>Agendas</h5>
+										</a>
+									</li>
+									<li class="nav-item dropdown ps-2">
+										<a class="nav-link animated-button my-float" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
+											<h5>Orçamentos</h5>
+										</a>
+										<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+											<li><a class="dropdown-item" href="<?php echo BASEURL; ?>orcamentos/cadastro.php?i=<?php echo $_SESSION['id']; ?>">Novo Orçamento</a></li>
+											<li><a class="dropdown-item" href="<?php echo BASEURL; ?>orcamentos/leitura.php">Meus Orçamentos</a></li>
+										</ul>
+									</li>
+								<?php endif; ?>
+								<li class="nav-item dropdown ps-2">
+									<a class="nav-link animated-button my-float" href="<?php echo BASEURL; ?>producao/leitura.php" style="color: white;">
+										<h5>Produções</h5>
+									</a>
+								</li>
+
+							<?php endif; ?>
+							<!-- Produtos e Funcionarios -->
 							<?php if (check_admin()) : ?>
 								<li class="nav-item dropdown ps-2">
 									<a class="nav-link animated-button my-float" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
@@ -50,25 +76,7 @@
 										<li><a class="dropdown-item" href="<?php echo BASEURL; ?>funcionarios/cadastro.php">Novo Funcionário</a></li>
 										<li><a class="dropdown-item" href="<?php echo BASEURL; ?>funcionarios/leitura.php">Meus Funcionários</a></li>
 									</ul>
-								</li>
-							<?php endif; ?>
-							<!-- orcamentos -->
-							<?php if (check_admin_funcionario()) : ?>
-								<li class="nav-item dropdown ps-2">
-									<a class="nav-link animated-button my-float" href="<?php echo BASEURL; ?>agendas/leitura.php" style="color: white;">
-										<h5>Agendas</h5>
-									</a>
-								</li>
-								<li class="nav-item dropdown ps-2">
-									<a class="nav-link animated-button my-float" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
-										<h5>Orçamentos</h5>
-									</a>
-									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<li><a class="dropdown-item" href="<?php echo BASEURL; ?>orcamentos/cadastro.php?i=<?php echo $_SESSION['id']; ?>">Novo Orçamento</a></li>
-										<li><a class="dropdown-item" href="<?php echo BASEURL; ?>orcamentos/leitura.php">Meus Orçamentos</a></li>
-									</ul>
-								</li>
-
+								</li>							
 							<?php else : ?>
 								<li class="nav-item dropdown ps-2">
 									<a class="nav-link animated-button my-float" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
@@ -101,7 +109,7 @@
 										<li><a class="dropdown-item" href="<?php echo BASEURL; ?>clientes/cadastrar.php">Cadastrar</a></li> <!-- cadastrar -->
 
 									<?php else : ?>
-										<?php if ($_SESSION['cargo'] == "admin" or $_SESSION['cargo'] == "orçamento") : ?>
+										<?php if (check_admin_funcionario()) : ?>
 											<li><a class="dropdown-item" href="<?php echo BASEURL; ?>funcionarios/edit.php?i=<?php echo $_SESSION['id']; ?>">Perfil</a></li>
 											<li>
 											<?php else : ?>

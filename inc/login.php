@@ -33,7 +33,7 @@ function login(){
                     $_SESSION['senha'] = $vResultado['senha_funcionario'];
                     $_SESSION['nivel'] = $vResultado['nivel_funcionario'];
                     $_SESSION['cargo'] = $vResultado['cargo_funcionario'];
-                    
+                    close_db($objDatabase);
 					header('location:../index.php');
                 }
                 else {
@@ -41,7 +41,8 @@ function login(){
                 }
             }
         } catch (Exception $objErr) {
-            echo "Ocorreu um erro ". $objErr->getMessage();
+            close_db($objDatabase);
+            echo "<script>abrirErro();</script".$objErr->getMessage(); 
             header("Location:".BASEURL);
         }
     }

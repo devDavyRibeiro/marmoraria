@@ -47,7 +47,7 @@ $vValue = editar($vId);
             <div class="row">
                 <div class="mb-4 col-11">
                     <label class="form-label">Senha</label>
-                    <input type="password" class="form-control" name="senha"value="<?php echo $vValue['senha_cliente']?>" required maxlength="50">
+                    <input type="password" class="form-control" name="senha" maxlength="50">
                 </div>
             </div>
             <div class="row">

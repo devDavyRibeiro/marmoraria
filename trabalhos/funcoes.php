@@ -7,7 +7,7 @@ function produtos(){
         $vResults = readBase("Produtos");
         return $vResults;
     } catch (Exception $objErr) {
-        echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+        echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
 

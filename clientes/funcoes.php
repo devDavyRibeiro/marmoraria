@@ -18,12 +18,10 @@ function form(){
             add($vClientes,"_clientes");
             
         } catch(Exception $objErr){
-            echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+            echo "<script>abrirErro();</script".$objErr->getMessage(); 
         }
-       //header("Location: ../index.php");
     }
 }
-
 function editar($vId)
 {
     valid_login();
@@ -50,19 +48,21 @@ function editar($vId)
         }
 
     } catch (Exception $objErr) {
-        echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+       echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
 function deletar($vId){
     try {
         valid_login();
         deleteReferencia("a","Agendas a","Clientes c","a.fk_cliente", "c.id_cliente",$vId);
-        deleteReferencia("o","Orcamentos o","Clientes c","o.fk_cliente", "c.id_cliente",$vId);
+        if(deleteImageOrcamento($vId,"Clientes","o.fk_cliente","c.id_cliente","c.id_cliente")){
+            deleteReferencia("o","Orcamentos o","Clientes c","o.fk_cliente", "c.id_cliente",$vId);
+        }       
         delete($vId,"_clientes");
         logout();
         header("Location:../index.php");
     } catch (Exception $objErr) {
-        echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+        echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
 

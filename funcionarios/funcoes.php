@@ -20,7 +20,7 @@ function form(){
                
         }
     }catch(Exception $objErr){
-        echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+        echo "<script>abrirErro();</script".$objErr->getMessage(); 
     } 
     
 }
@@ -31,7 +31,7 @@ function leitura(){
         $vResults = readBase("Funcionarios");
         return $vResults;
     } catch (Exception $objErr) {
-        echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+        echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
 function editar($vId)
@@ -64,7 +64,7 @@ function editar($vId)
         }
 
     } catch (Exception $objErr) {
-        echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+        echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
 function deletar($vId){
@@ -72,7 +72,10 @@ function deletar($vId){
         valid_admin();
         if ($vId != 1) {
             deleteReferencia("a","Agendas a","Funcionarios f","a.fk_funcionario", "f.id_funcionario",$vId);
-            deleteReferencia("o","Orcamentos o","Funcionarios f","o.fk_funcionario", "f.id_funcionario",$vId);		
+            if(deleteImageOrcamento($vId,"Funcionarios f","o.fk_funcionario","f.id_funcionario","f.id_funcionario")){
+                deleteReferencia("o","Orcamentos o","Funcionarios f","o.fk_funcionario", "f.id_funcionario",$vId);	
+            } 
+	
             delete($vId,"_funcionarios");
         }
         else {
@@ -80,6 +83,6 @@ function deletar($vId){
         }
         header("Location:../index.php");
     } catch (Exception $objErr) {
-        echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+        echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }

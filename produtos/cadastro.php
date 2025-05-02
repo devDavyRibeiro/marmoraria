@@ -16,12 +16,6 @@ form();
                 </div>
             </div>
             <div class="row">
-                <div class="mb-3 col-11">
-                    <label class="ms-1 form-label ">Valor do Produto</label>
-                    <input type="number" class="form-control" name="valor" required placeholder="R$00,00">
-                </div>
-            </div>
-            <div class="row">
                 <div class="mb-3">
                 <label for="" class="form-label">Foto do Produto</label>
                 <input type="file" class="form-control" name="foto" id=""placeholder="Foto do Produto">

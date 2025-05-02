@@ -5,6 +5,6 @@
     }
     $vId = base64_decode($_GET['i']);
     deletar($vId);
-    header("Location: ../index.php");
+    //header("Location: ../index.php");
 ?>
 

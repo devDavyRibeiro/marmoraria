@@ -25,9 +25,8 @@ function close_db($obj)
 
 // função que organiza e insere dados nas tabelas. OBS: em $vTabela deve estar no seguinte formato: _NomeDaTabela
 // em $Post deve colocar a variável global $_POST 
-function add($vPost, $vTabela)
+function add($vPost, $vTabela, $vSuccess = null)
 {
-
 	$objDatabase = open_db();
 
 	$vUpdate = null;
@@ -44,10 +43,10 @@ function add($vPost, $vTabela)
 	}
 
 	$vUpdate = rtrim($vUpdate, ','); // tira a última vírgula
-	$vValues = rtrim($vValues, ','); // tira a última vírgula
+	$vValues = rtrim($vValues, ',');
 	
-	$vTabela = ltrim($vTabela, "_"); // pega o nome da tabela
-	$vTabela = ucfirst($vTabela); // coloca o primeira letra da tabela em Maiuscula
+	$vTabela = ltrim($vTabela, "_");
+	$vTabela = ucfirst($vTabela);
 
 	$vSql = "INSERT INTO $vTabela($vUpdate)VALUES($vValues)"; //sql da inserção
 
@@ -55,13 +54,17 @@ function add($vPost, $vTabela)
 		$vStmt = $objDatabase->prepare($vSql); //prepara para execução
 		$vStmt->execute(); // executa o código sql
 		
-		$objDatabase = close_db($objDatabase);
-		
 		if ($vStmt->rowCount() > 0) {
-			
-			echo '<script>abrirAlerta();</script>';
+			if(is_null($vSuccess) or $vSuccess == true)
+				echo '<script>abrirAlerta();</script>';
+			else{
+				$vId = $objDatabase->lastInsertId();
+				return $vId;
+			}
 		}
+		close_db($objDatabase);
 	} catch (Exception $objErr) {
+		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
 	}
 }
@@ -81,7 +84,9 @@ function readBase($vTabela = null)
 		else{
 			 return false;
 		}
+		close_db($objDatabase);
 	} catch (Exception $objErr) {
+		close_db($objDatabase);
 		echo "<script>abrirErro();</script>";
 	}
 }
@@ -100,7 +105,9 @@ function readId($vId, $vTabela)
 		} else {
 			return null;
 		}
+		close_db($objDatabase);
 	} catch (Exception $objErr) {
+		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
 	}
 }
@@ -128,7 +135,9 @@ function readOutros($vSelect, $vTabela, $vCampo = null, $vPesquisa = null)
 		} else {
 			return false;
 		}
+		close_db($objDatabase);
 	} catch (Exception $objErr) {
+		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
 	}
 }
@@ -158,7 +167,35 @@ function readCount($vCount = null,$vTabela,$vCampo =null,$vPesquisa = null):int{
 		$vResult = $vStmt->fetchColumn();
 	
 		return $vResult;
+		close_db($objDatabase);
 	} catch (Exception $objErr) {
+		close_db($objDatabase);
+		echo "<script>abrirErro();</script>" . $objErr->getMessage();
+	}
+}
+function ReadOne($vSelect,$vTabela,$vCampo,$vValor,$vInner = null){
+	$objDatabase = open_db();
+	try {
+		if (isset($vInner)) {
+			$vSql = "SELECT $vSelect FROM $vTabela INNER JOIN $vInner WHERE $vCampo = ?";
+		}
+		else {
+			$vSql = "SELECT $vSelect FROM $vTabela WHERE $vCampo = ?";
+		}
+		var_dump($vSql);
+		$vStmt = $objDatabase->prepare($vSql);
+		$vStmt->execute([$vValor]);
+		if($vStmt->rowCount()>0){
+			$vResult = $vStmt->fetch();
+			return $vResult;
+		}
+		else {
+			$vResult = null;
+			return $vResult;
+		}
+		close_db($objDatabase);
+	} catch (Exception $objErr) {
+		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
 	}
 }
@@ -185,7 +222,7 @@ function readInner($vSelect, $vTabela1,$vTabela2,$vCTabela1,$vCTabela2,$vTabela3
 			$vSql.= " WHERE $vWhere";
 		}
 		
-		
+	
 		$vStmt = $objDatabase->prepare($vSql);
 
 		if(is_null($vValor)) {
@@ -200,31 +237,41 @@ function readInner($vSelect, $vTabela1,$vTabela2,$vCTabela1,$vCTabela2,$vTabela3
 			$objDatabase = close_db($objDatabase);
 			return  $vResult;
 		} else {
-			false;
+			return false;
 		}
+		close_db($objDatabase);
 	} catch (Exception $objErr) {
-		echo "erro" . $objErr->getMessage();
+		close_db($objDatabase);
+		echo "<script>abrirErro();</script>" . $objErr->getMessage();
 	}
 }
-function update($vId, $vPost, $vTabela)
+function update($vId, $vPost, $vTabela, $vSuccess = null)
 {
     $objDatabase = open_db();
     try {
         $vColumn = null;
         foreach ($vPost as $vPreColumn => $vDado) {
+			if (strpos($vPreColumn,"_")) {
+				$vColumn .= $vPreColumn . "=" . "'$vDado',";
+				continue;
+			}
             $vColumn .= $vPreColumn . rtrim($vTabela, 's') . '=' . "'$vDado',";
         }
-        $vColumn = rtrim($vColumn, ',');
-        $vTabela = ltrim(ucfirst($vTabela), "_"); // pega o nome da tabela e deixa a primeira letra em Maiuscula
-        $vSql = "UPDATE $vTabela SET $vColumn WHERE id_" . rtrim($vTabela, 's') . " = ?";
-        $vStmt = $objDatabase->prepare($vSql);
-        $vStmt->execute([$vId]);
+    	$vColumn = rtrim($vColumn, ',');
+    	$vTabela = ltrim($vTabela, "_");
+    	$vSql = "UPDATE $vTabela SET $vColumn WHERE id_" . rtrim($vTabela, 's') . " = ?";
+		
+	    $vStmt = $objDatabase->prepare($vSql);
+		$vStmt->execute([$vId]);
         if ($vStmt->rowCount() > 0) {
             // Atualização bem-sucedida, mostra o alerta
-            echo '<script>abrirAlerta();</script>';
+			if(is_null($vSuccess) or $vSuccess == true)
+				echo '<script>abrirAlerta();</script>';
         }
+		close_db($objDatabase);
     } catch (Exception $objErr) {
         // Trate a exceção conforme necessário
+		close_db($objDatabase);
         echo "<script>abrirErro();</script>" . $objErr->getMessage();
     }
 }
@@ -235,7 +282,7 @@ function delete($vId, $vTabela)
 	try {
 		$vCampo = "id" . rtrim($vTabela, 's');
 		$vTabela = ltrim($vTabela, "_");
-		$vTabela = ucfirst($vTabela); // coloca o primeira letra da tabela em Maiuscula
+		$vTabela = ucfirst($vTabela);
 
 		$vSql = "DELETE FROM $vTabela WHERE $vCampo = ?";
 		$vStmt = $objDatabase->prepare($vSql);
@@ -243,8 +290,33 @@ function delete($vId, $vTabela)
 		if ($vStmt->rowCount() <= 0) {
 			throw new Exception("Erro ao deletar");
 		}
+		close_db($objDatabase);
 	} catch (Exception $objErr) {
+		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
+	}
+}
+function deleteImageOrcamento($vId,$vTabela,$vCTabelaOrc,$vCTabela,$vCampo){
+	$objDatabase = open_db();
+	try {
+		$vSql = "SELECT o.foto_orcamento FROM Orcamentos o INNER JOIN $vTabela ON $vCTabelaOrc = $vCTabela WHERE $vCampo = ?";
+		$vStmt = $objDatabase->prepare($vSql);
+		$vStmt->execute([$vId]);
+		if ($vStmt->rowCount() > 0) {
+			$vValue = $vStmt->fetch();
+			if (unlink("../orcamentos/".$vValue['foto_orcamento'])) {
+				return true;
+			}
+		}
+		else {
+			return false;
+		}
+		$vValue = $vStmt->fetch();
+
+		close_db($objDatabase);
+	} catch (Exception){	
+		close_db($objDatabase);
+		return false;
 	}
 }
 function criptografia($senha)
@@ -366,8 +438,12 @@ function deleteReferencia($vLetra,$vTabelaFk,$vTabelaId, $vCodigoFk,$vCodigoId,$
 		WHERE $vCodigoId=?"; 
 		$vStmt = $objDatabase->prepare($vSql);
 		$vStmt->execute([$vId]);
-	
-	} catch (Exception $objErr) {
-		echo "<h2> Algo deu errado" . $objErr->getMessage() . "</h2>";
+		if ($vStmt->rowCount() > 0) {
+			return true;
+		}
+		close_db($objDatabase);
+	} catch (Exception) {
+		close_db($objDatabase);
+		return false;
 	}	
 }

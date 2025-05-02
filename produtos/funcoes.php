@@ -38,6 +38,7 @@ function editar($vId)
             $vValue = readId($vId, "Produtos");
             if (!empty($_POST)) {
                 $vProdutos = $_POST;
+                
                 if (!empty($_FILES["foto"]["name"])) {
                     if ($vFotoNova =  upload() and unlink($vValue['foto_produto'])) {
                        $vProdutos['foto'] = $vFotoNova;
@@ -50,6 +51,8 @@ function editar($vId)
                 else {
                     $vProdutos['foto'] = $vValue['foto_produto'];
                 }
+                
+                var_dump($vProdutos);
                 update($vId,$vProdutos,"_produtos");
                 $vValue = readId($vId, "Produtos");
                 return $vValue;
@@ -103,12 +106,7 @@ function upload()
             throw new Exception("Não foi possível colocar o arquivo no diretório");
         }
     }catch(Exception $objErr){
-        return false;
-        $vErr = $objErr->getMessage();
-        $vErr = htmlspecialchars($vErr, ENT_QUOTES, 'UTF-8');
-        
-        echo "<script>alert('$vErr');</script>";
-        
+        return false;        
     }
     
 }
@@ -118,7 +116,14 @@ function deletar($vId){
             $vProdutos = readId($vId,"Produtos");
 
             if(unlink($vProdutos['foto_produto'])){
-                deleteReferencia("oc","Orcamento_Produtos oc","Produtos p","oc.fk_produto", "p.id_produto",$vId);	
+                if(!is_null($vIdProducao = ReadOne("op.id_orcamento_produto","Produtos p","p.id_produto", $vId, "Orcamento_Produtos op on p.id_produto = op.fk_produto"))){
+                    if(deleteImageOrcamento($vIdProducao['id_orcamento_produto'],"Orcamento_Produtos op","id_orcamento","op.fk_orcamento","op.id_orcamento_produto")){
+                        deleteReferencia("oc","Orcamento_Produtos oc","Produtos p","oc.fk_produto", "p.id_produto",$vId);	
+                    }
+                    else {
+                        throw new Exception("Erro ao Deletar foto de Orçamento");
+                    }
+                }
                 delete($vId,"_produtos");
             } 
             else {

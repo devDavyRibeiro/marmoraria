@@ -19,12 +19,10 @@ function form($vFk=null){
             else
                 throw new Exception("Sem funcionários da funcionalidade 'Orçamento'");
                 
-            if (DataLivre($vAgendas['visita'])) 
-                add($vAgendas,"_agendas");
-            else
-                throw new Exception("Essa data (".formataData($vAgendas['visita'],"d/m/y H:m").") já esta preenchida. Por favor escolha outra data, ou horário"); 
+            add($vAgendas,"_agendas");
+
         } catch(Exception $objErr){
-            echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+            echo "<script>abrirErro();</script".$objErr->getMessage(); 
         }
     }
 }
@@ -40,7 +38,7 @@ function leitura($vFk = NULL){
         }
         return $vResult;
     } catch(Exception $objErr){
-        echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+        echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
 function editar($vId)
@@ -55,10 +53,17 @@ function editar($vId)
                     update($vId,$vAgendas,"_agendas");
                     $vValue = readId($vId, "Agendas");
                     return $vValue;
+                   
+                    } 
+                    else
+                        throw new Exception("Essa data (".formataData($vAgendas['visita'],"d/m/y H:m").") já esta preenchida. Por favor escolha outra data, ou horário"); 
                 }
-                else
-                    throw new Exception("Essa data (".formataData($vAgendas['visita'],"d/m/y H:m").") já esta preenchida. Por favor escolha outra data, ou horário"); 
+                else {
+                    update($vId,$vAgendas,"_agendas");
+                    $vValue = readId($vId, "Agendas");
+                    return $vValue;
                 }
+
                
                
             }
@@ -75,7 +80,7 @@ function editar($vId)
         }
 
     } catch (Exception $objErr) {
-        echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+        echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
 
@@ -86,7 +91,7 @@ function deletar($vId){
         }
        header("Location:index.php");
     } catch (Exception $objErr) {
-        echo "<h2> Algo deu errado ". $objErr-> getMessage(). "</h2>";
+        echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
 function DataLivre($vData){
