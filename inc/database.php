@@ -15,6 +15,7 @@ function open_db()
 		return $vConexao;
 	} catch (PDOException $vErr) {
 		$_SESSION['danger'] = "Erro ao conectar ao banco" .  $vErr->getMessage();
+		echo("<script>console.error('" + "Erro ao conectar ao banco')");
 	}
 }
 function close_db($obj)
@@ -66,12 +67,14 @@ function add($vPost, $vTabela, $vSuccess = null)
 	} catch (Exception $objErr) {
 		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 	}
 }
 
 function readBase($vTabela = null)
 {
 	$objDatabase = open_db();
+	$vTabela = ucfirst($vTabela);
 	try {
 		$vSql = "SELECT * FROM $vTabela";
 		$vStmt = $objDatabase->query($vSql);
@@ -88,10 +91,12 @@ function readBase($vTabela = null)
 	} catch (Exception $objErr) {
 		close_db($objDatabase);
 		echo "<script>abrirErro();</script>";
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 	}
 }
 function readId($vId, $vTabela)
 {
+	$vTabela = ucfirst($vTabela);
 	$objDatabase = open_db();
 	try {
 		$vCampo = "id_" . lcfirst(rtrim($vTabela, 's'));
@@ -109,10 +114,12 @@ function readId($vId, $vTabela)
 	} catch (Exception $objErr) {
 		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 	}
 }
 function readOutros($vSelect, $vTabela, $vCampo = null, $vPesquisa = null)
 {
+	$vTabela = ucfirst($vTabela);
 	$objDatabase = open_db();
 	try {
 		if (!is_null($vCampo) and !is_null($vPesquisa)) {
@@ -139,9 +146,11 @@ function readOutros($vSelect, $vTabela, $vCampo = null, $vPesquisa = null)
 	} catch (Exception $objErr) {
 		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 	}
 }
 function readCount($vCount = null,$vTabela,$vCampo =null,$vPesquisa = null):int{
+	$vTabela = ucfirst($vTabela);
 	$objDatabase = open_db();
 	try {
 		if(is_null($vCount)){
@@ -171,9 +180,11 @@ function readCount($vCount = null,$vTabela,$vCampo =null,$vPesquisa = null):int{
 	} catch (Exception $objErr) {
 		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 	}
 }
 function ReadOne($vSelect,$vTabela,$vCampo,$vValor,$vInner = null){
+	$vTabela = ucfirst($vTabela);
 	$objDatabase = open_db();
 	try {
 		if (isset($vInner)) {
@@ -197,10 +208,13 @@ function ReadOne($vSelect,$vTabela,$vCampo,$vValor,$vInner = null){
 	} catch (Exception $objErr) {
 		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 	}
 }
 function readInner($vSelect, $vTabela1,$vTabela2,$vCTabela1,$vCTabela2,$vTabela3 = null, $vCTabela3 = null,$vWhere = null,$vValor=null,$vNCTabela1 = null){
 	$objDatabase = open_db();
+	$vTabela1 = ucfirst($vTabela1);
+	$vTabela2 = ucfirst($vTabela2);
 	try {
 		if (is_null($vTabela3) and is_null($vTabela3)) {
 			$vSql = "SELECT $vSelect FROM $vTabela1 INNER JOIN $vTabela2 ON $vCTabela1 = $vCTabela2";
@@ -243,25 +257,27 @@ function readInner($vSelect, $vTabela1,$vTabela2,$vCTabela1,$vCTabela2,$vTabela3
 	} catch (Exception $objErr) {
 		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 	}
 }
 function update($vId, $vPost, $vTabela, $vSuccess = null)
 {
-    $objDatabase = open_db();
+	$objDatabase = open_db();
     try {
-        $vColumn = null;
+		$vColumn = null;
         foreach ($vPost as $vPreColumn => $vDado) {
 			if (strpos($vPreColumn,"_")) {
 				$vColumn .= $vPreColumn . "=" . "'$vDado',";
 				continue;
 			}
-            $vColumn .= $vPreColumn . rtrim($vTabela, 's') . '=' . "'$vDado',";
-        }
-    	$vColumn = rtrim($vColumn, ',');
-    	$vTabela = ltrim($vTabela, "_");
-    	$vSql = "UPDATE $vTabela SET $vColumn WHERE id_" . rtrim($vTabela, 's') . " = ?";
+			$vColumn .= $vPreColumn . rtrim($vTabela, 's') . '=' . "'$vDado',";
+		}
+		$vColumn = rtrim($vColumn, ',');
+		$vTabela = ltrim($vTabela, "_");
+		$vTabela = ucfirst($vTabela);
+		$vSql = "UPDATE A SET $vColumn WHERE id_" . rtrim($vTabela, 's') . " = ?";
 		
-	    $vStmt = $objDatabase->prepare($vSql);
+		$vStmt = $objDatabase->prepare($vSql);
 		$vStmt->execute([$vId]);
         if ($vStmt->rowCount() > 0) {
             // Atualização bem-sucedida, mostra o alerta
@@ -273,12 +289,14 @@ function update($vId, $vPost, $vTabela, $vSuccess = null)
         // Trate a exceção conforme necessário
 		close_db($objDatabase);
         echo "<script>abrirErro();</script>" . $objErr->getMessage();
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
     }
 }
 function delete($vId, $vTabela)
 {
 	$objDatabase = open_db();
 	$vCampo = NULL;
+	$vTabela = ucfirst($vTabela);
 	try {
 		$vCampo = "id" . rtrim($vTabela, 's');
 		$vTabela = ltrim($vTabela, "_");
@@ -294,6 +312,7 @@ function delete($vId, $vTabela)
 	} catch (Exception $objErr) {
 		close_db($objDatabase);
 		echo "<script>abrirErro();</script>" . $objErr->getMessage();
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 	}
 }
 function deleteImageOrcamento($vId,$vTabela,$vCTabelaOrc,$vCTabela,$vCampo){
@@ -314,8 +333,9 @@ function deleteImageOrcamento($vId,$vTabela,$vCTabelaOrc,$vCTabela,$vCampo){
 		$vValue = $vStmt->fetch();
 
 		close_db($objDatabase);
-	} catch (Exception){	
+	} catch (Exception $objErr){	
 		close_db($objDatabase);
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 		return false;
 	}
 }
@@ -442,8 +462,9 @@ function deleteReferencia($vLetra,$vTabelaFk,$vTabelaId, $vCodigoFk,$vCodigoId,$
 			return true;
 		}
 		close_db($objDatabase);
-	} catch (Exception) {
+	} catch (Exception $objErr) {
 		close_db($objDatabase);
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 		return false;
 	}	
 }
