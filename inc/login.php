@@ -42,6 +42,7 @@ function login(){
             }
         } catch (Exception $objErr) {
             close_db($objDatabase);
+            echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
             echo "<script>abrirErro();</script".$objErr->getMessage(); 
             header("Location:".BASEURL);
         }

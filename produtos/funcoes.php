@@ -16,7 +16,8 @@ function form(){
             
         }
     }catch(Exception $objErr){
-        echo "<script>abrirErro();</script>" . $objErr->getMessage();
+            echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
+            echo "<script>abrirErro();</script>" . $objErr->getMessage();
     } 
     
 }
@@ -26,7 +27,8 @@ function leitura(){
         $vResults = readBase("Produtos");
         return $vResults;
     } catch (Exception $objErr) {
-        echo "<script>abrirErro();</script>" . $objErr->getMessage();
+           echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
+           echo "<script>abrirErro();</script>" . $objErr->getMessage();
     }
 }
 function editar($vId)
@@ -70,7 +72,8 @@ function editar($vId)
         }
 
     } catch (Exception $objErr) {
-        echo "<script>abrirErro();</script>" . $objErr->getMessage();
+            echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
+            echo "<script>abrirErro();</script>" . $objErr->getMessage();
     }
 }
 function upload()
@@ -106,6 +109,7 @@ function upload()
             throw new Exception("Não foi possível colocar o arquivo no diretório");
         }
     }catch(Exception $objErr){
+        echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
         return false;        
     }
     
@@ -132,6 +136,7 @@ function deletar($vId){
         }
         header("Location:../index.php");
     } catch (Exception $objErr) {
-        echo "<script>abrirErro();</script>" . $objErr->getMessage();
+            echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
+            echo "<script>abrirErro();</script>" . $objErr->getMessage();
     }
 }

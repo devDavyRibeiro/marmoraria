@@ -18,6 +18,7 @@ function form(){
             add($vClientes,"_clientes");
             
         } catch(Exception $objErr){
+            echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
             echo "<script>abrirErro();</script".$objErr->getMessage(); 
         }
     }
@@ -48,6 +49,7 @@ function editar($vId)
         }
 
     } catch (Exception $objErr) {
+        echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
        echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
@@ -62,6 +64,7 @@ function deletar($vId){
         logout();
         header("Location:../index.php");
     } catch (Exception $objErr) {
+        echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
         echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }

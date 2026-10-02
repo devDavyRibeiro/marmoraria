@@ -13,9 +13,9 @@ function open_db()
 		$vConexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$_SESSION['success'] = "Conexão feita com sucesso";
 		return $vConexao;
-	} catch (PDOException $vErr) {
-		$_SESSION['danger'] = "Erro ao conectar ao banco" .  $vErr->getMessage();
-		echo("<script>console.error('" + "Erro ao conectar ao banco')");
+	} catch (PDOException $objErr) {
+		$_SESSION['danger'] = "Erro ao conectar ao banco" .  $objErr->getMessage();
+		echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
 	}
 }
 function close_db($obj)

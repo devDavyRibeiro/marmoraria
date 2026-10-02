@@ -22,6 +22,7 @@ function form($vFk=null){
             add($vAgendas,"_agendas");
 
         } catch(Exception $objErr){
+            echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
             echo "<script>abrirErro();</script".$objErr->getMessage(); 
         }
     }
@@ -38,6 +39,7 @@ function leitura($vFk = NULL){
         }
         return $vResult;
     } catch(Exception $objErr){
+        echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
         echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
@@ -80,6 +82,7 @@ function editar($vId)
         }
 
     } catch (Exception $objErr) {
+        echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
         echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
@@ -91,6 +94,7 @@ function deletar($vId){
         }
        header("Location:index.php");
     } catch (Exception $objErr) {
+        echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
         echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }

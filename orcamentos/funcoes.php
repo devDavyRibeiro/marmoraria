@@ -46,6 +46,7 @@ function form($vFk=null){
             add($vProducoes,"_orcamento_produtos");
             
         } catch(Exception $objErr){
+            echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
             echo "<script>abrirErro();</script>" . $objErr->getMessage();
         }
       
@@ -67,6 +68,7 @@ function leitura($vFk = null){
 
         return $vResult;
     } catch(Exception $objErr){
+        echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
         echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
@@ -133,6 +135,7 @@ function editar($vId)
         }
         
     } catch (Exception $objErr) {
+        echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
         echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
@@ -152,6 +155,7 @@ function deletar($vId){
         }
        header("Location:index.php");
     } catch (Exception $objErr) {
+        echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
         echo "<script>abrirErro();</script".$objErr->getMessage(); 
     }
 }
@@ -187,7 +191,8 @@ function upload()
         } else {
             throw new Exception("Não foi possível colocar o arquivo no diretório");
         }
-    }catch(Exception){
+    }catch(Exception $objErr){
+        echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
         return false;
     }
     

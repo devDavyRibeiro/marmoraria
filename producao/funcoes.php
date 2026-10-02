@@ -10,7 +10,8 @@ function leitura(){
         $vResult = readInner($vSelect,"Orcamento_Produtos op","Orcamentos o","op.fk_orcamento","o.id_orcamento","Produtos p","id_produto",null,null,"fk_produto");
         return $vResult;
     } catch(Exception $objErr){
-        echo "<script>abrirErro();</script".$objErr->getMessage(); 
+            echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
+            echo "<script>abrirErro();</script>" . $objErr->getMessage(); 
     }
 }
 function editar($vId)
@@ -37,7 +38,8 @@ function editar($vId)
         }
 
     } catch (Exception $objErr) {
-        echo "<script>abrirErro();</script".$objErr->getMessage(); 
+            echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
+            echo "<script>abrirErro();</script>" . $objErr->getMessage(); 
     }
 }
 
@@ -52,7 +54,8 @@ function deletar($vId){
         }
         
     } catch (Exception $objErr) {
-        echo "<script>abrirErro();</script".$objErr->getMessage(); 
+            echo "<script>console.error(" . json_encode($objErr->getMessage()) . ");</script>";
+            echo "<script>abrirErro();</script>" . $objErr->getMessage(); 
     }
 }
 ?>
